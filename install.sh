@@ -378,13 +378,14 @@ function configure_xray() {
     exit 1
   fi
 
-  UUID="$(/xray uuid)"
+  UUID="$(xray uuid)"
 
   key=$(xray x25519)
-  PRIVATEKEY=$(cat $key | grep "Private" | awk -F ': ' '{print $2}')
+  print_ok "key: ${key}"
+  PRIVATEKEY=$(echo $key | grep "Private" | awk -F ': ' '{print $2}')
   PUBLICKEY=$(cat $key | grep "Public" | awk -F ': ' '{print $2}')
 
-  echo "Private key: $PRIVATEKEY"
+  echo "Private key: ${PRIVATEKEY}"
   echo "Public key: $PUBLICKEY"
 
   jq ".inbounds[0].settings.clients[0].id=\"$UUID\"" config.json > config.json_tmp && mv config.json_tmp config.json
