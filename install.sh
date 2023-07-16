@@ -86,44 +86,44 @@ function system_check() {
     print_ok "当前系统为 Centos ${VERSION_ID} ${VERSION}"
     INS="yum install -y"
     ${INS} wget
-    wget -N -P /etc/yum.repos.d/ https://raw.githubusercontent.com/moyada/Xray_onekey/${github_branch}/basic/nginx.repo
+    # wget -N -P /etc/yum.repos.d/ https://raw.githubusercontent.com/moyada/Xray_onekey/${github_branch}/basic/nginx.repo
 
 
   elif [[ "${ID}" == "ol" ]]; then
     print_ok "当前系统为 Oracle Linux ${VERSION_ID} ${VERSION}"
     INS="yum install -y"
-    wget -N -P /etc/yum.repos.d/ https://raw.githubusercontent.com/moyada/Xray_onekey/${github_branch}/basic/nginx.repo
+    # wget -N -P /etc/yum.repos.d/ https://raw.githubusercontent.com/moyada/Xray_onekey/${github_branch}/basic/nginx.repo
   elif [[ "${ID}" == "debian" && ${VERSION_ID} -ge 9 ]]; then
     print_ok "当前系统为 Debian ${VERSION_ID} ${VERSION}"
     INS="apt install -y"
-    # 清除可能的遗留问题
-    rm -f /etc/apt/sources.list.d/nginx.list
-    # nginx 安装预处理
-    $INS curl gnupg2 ca-certificates lsb-release debian-archive-keyring
-    curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-    | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-    http://nginx.org/packages/debian `lsb_release -cs` nginx" \
-    | tee /etc/apt/sources.list.d/nginx.list
-    echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
-    | tee /etc/apt/preferences.d/99nginx
+    # # 清除可能的遗留问题
+    # rm -f /etc/apt/sources.list.d/nginx.list
+    # # nginx 安装预处理
+    # $INS curl gnupg2 ca-certificates lsb-release debian-archive-keyring
+    # curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
+    # | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+    # echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
+    # http://nginx.org/packages/debian `lsb_release -cs` nginx" \
+    # | tee /etc/apt/sources.list.d/nginx.list
+    # echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
+    # | tee /etc/apt/preferences.d/99nginx
 
     apt update
 
   elif [[ "${ID}" == "ubuntu" && $(echo "${VERSION_ID}" | cut -d '.' -f1) -ge 18 ]]; then
     print_ok "当前系统为 Ubuntu ${VERSION_ID} ${UBUNTU_CODENAME}"
     INS="apt install -y"
-    # 清除可能的遗留问题
-    rm -f /etc/apt/sources.list.d/nginx.list
-    # nginx 安装预处理
-    $INS curl gnupg2 ca-certificates lsb-release ubuntu-keyring
-    curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-    | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-    http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" \
-    | tee /etc/apt/sources.list.d/nginx.list
-    echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
-    | tee /etc/apt/preferences.d/99nginx
+    # # 清除可能的遗留问题
+    # rm -f /etc/apt/sources.list.d/nginx.list
+    # # nginx 安装预处理
+    # $INS curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+    # curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
+    # | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+    # echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
+    # http://nginx.org/packages/ubuntu `lsb_release -cs` nginx" \
+    # | tee /etc/apt/sources.list.d/nginx.list
+    # echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
+    # | tee /etc/apt/preferences.d/99nginx
 
     apt update
   else
