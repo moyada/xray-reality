@@ -302,6 +302,7 @@ function update_sh() {
 }
 
 function xray_tmp_config_file_check_and_use() {
+  cat "${xray_conf_dir}/config_tmp.json"
   if [[ -s ${xray_conf_dir}/config_tmp.json ]]; then
     mv -f ${xray_conf_dir}/config_tmp.json ${xray_conf_dir}/config.json
   else
