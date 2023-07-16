@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 ERROR="${Red}[ERROR]${Font}"
 
 # 变量
-shell_version="1.0.0"
+shell_version="0.0.1"
 github_branch="master"
 xray_conf_dir="/usr/local/etc/xray"
 website_dir="/www/xray_web/"
@@ -362,6 +362,7 @@ function modify_publickey() {
   kv=$(xray x25519)
   PrivateKey=$(echo $kv | grep "Private key" | awk  -F ': '  '{print $2}')
   PublicKey=$(echo $kv | grep "Public key" | awk  -F ': '  '{print $2}')
+
   print_ok "密钥创建完成\n${PrivateKey}"
   cat ${xray_conf_dir}/config.json | jq 'setpath(["inbounds",0,"streamSettings","realitySettings","privateKey"];"'${PrivateKey}'")' >${xray_conf_dir}/config_tmp.json
   xray_tmp_config_file_check_and_use
@@ -371,22 +372,24 @@ function modify_publickey() {
 function configure_xray() {
   cd ${xray_conf_dir} && rm -f config.json && wget -O config.json https://raw.githubusercontent.com/moyada/xray-reality/${github_branch}/config.json
 
-  read -rp "请输入端口号(默认：443)：" PORT
-  [ -z "$PORT" ] && PORT="443"
-  if [[ $PORT -le 0 ]] || [[ $PORT -gt 65535 ]]; then
-    print_error "请输入 0-65535 之间的值"
-    exit 1
-  fi
+  # read -rp "请输入端口号(默认：443)：" PORT
+  # [ -z "$PORT" ] && PORT="443"
+  # if [[ $PORT -le 0 ]] || [[ $PORT -gt 65535 ]]; then
+  #   print_error "请输入 0-65535 之间的值"
+  #   exit 1
+  # fi
 
+  PORT="443"
   UUID="$(xray uuid)"
-
   key=$(xray x25519)
-  print_ok "key: ${key}"
-  PRIVATEKEY=$(echo $key | grep "Private" | awk -F ': ' '{print $2}')
-  PUBLICKEY=$(echo $key | grep "Public" | awk -F ': ' '{print $2}')
 
-  echo "Private key: $PRIVATEKEY"
-  echo "Public key: $PUBLICKEY"
+  print_ok "密钥创建完成"
+
+  PRIVATEKEY=$(echo $key | grep "Private key" | awk -F ': ' '{print $2}')
+  PUBLICKEY=$(echo $key | grep "Public key" | awk -F ': ' '{print $2}')
+
+  print_ok "Private key: $PRIVATEKEY"
+  print_ok "Public key: $PUBLICKEY"
 
   jq ".inbounds[0].settings.clients[0].id=\"$UUID\"" config.json > config.json_tmp && mv config.json_tmp config.json
   jq ".inbounds[0].streamSettings.realitySettings.privateKey=\"$PRIVATEKEY\"" config.json > config.json_tmp && mv config.json_tmp config.json
