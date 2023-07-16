@@ -28,7 +28,7 @@ ERROR="${Red}[ERROR]${Font}"
 
 # 变量
 shell_version="1.3.11"
-github_branch="main"
+github_branch="master"
 xray_conf_dir="/usr/local/etc/xray"
 website_dir="/www/xray_web/"
 xray_access_log="/var/log/xray/access.log"
@@ -359,13 +359,12 @@ function modify_port() {
 
 function modify_publickey() {
   kv=$(xray x25519)
-  print_ok "密钥创建完成\n" ${kv}
+  print_ok "密钥创建完成\n${kv}"
   PrivateKey=$(echo $kv | grep "Private key" | awk  -F ': '  '{print $2}')
   PublicKey=$(echo $kv | grep "Public key" | awk  -F ': '  '{print $2}')
   cat ${xray_conf_dir}/config.json | jq 'setpath(["inbounds",0,"streamSettings","realitySettings","privateKey"];"'${PrivateKey}'")' >${xray_conf_dir}/config_tmp.json
   xray_tmp_config_file_check_and_use
-  judge "Xray PrivateKey 修改, PublicKey: " ${PublicKey}
-}
+  judge "Xray PrivateKey 修改, PublicKey: ${PublicKey}"
 
 function configure_xray() {
   cd /usr/local/etc/xray && rm -f config.json && wget -O config.json https://raw.githubusercontent.com/moyada/xray-reality/${github_branch}/config.json
