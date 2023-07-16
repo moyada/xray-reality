@@ -305,6 +305,7 @@ function xray_tmp_config_file_check_and_use() {
   if [[ -s ${xray_conf_dir}/config_tmp.json ]]; then
     mv -f ${xray_conf_dir}/config_tmp.json ${xray_conf_dir}/config.json
   else
+    cat ${xray_conf_dir}/config_tmp.json
     print_error "xray 配置文件修改异常"
   fi
 }
@@ -365,6 +366,7 @@ function modify_publickey() {
   cat ${xray_conf_dir}/config.json | jq 'setpath(["inbounds",0,"streamSettings","realitySettings","privateKey"];"'${PrivateKey}'")' >${xray_conf_dir}/config_tmp.json
   xray_tmp_config_file_check_and_use
   judge "Xray PrivateKey 修改, PublicKey: ${PublicKey}"
+}
 
 function configure_xray() {
   cd /usr/local/etc/xray && rm -f config.json && wget -O config.json https://raw.githubusercontent.com/moyada/xray-reality/${github_branch}/config.json
