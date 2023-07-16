@@ -16,7 +16,7 @@
             "flow": ""
           }
         ],
-        "decryption": "none",
+        "decryption": "none"
       },
       "streamSettings": {
         "network": "h2",

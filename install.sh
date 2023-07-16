@@ -312,7 +312,6 @@ function xray_tmp_config_file_check_and_use() {
 
 function modify_UUID() {
   [ -z "$UUID" ] && UUID=$(cat /proc/sys/kernel/random/uuid)
-  cat ${xray_conf_dir}/config.json
   cat ${xray_conf_dir}/config.json | jq 'setpath(["inbounds",0,"settings","clients",0,"id"];"'${UUID}'")' >${xray_conf_dir}/config_tmp.json
   xray_tmp_config_file_check_and_use
   judge "Xray TCP UUID 修改"
