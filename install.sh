@@ -381,12 +381,14 @@ function configure_xray() {
 
   PORT="443"
   UUID="$(xray uuid)"
-  key=$(xray x25519)
+  # key=$(xray x25519)
+
+  xray x25519 > key
 
   print_ok "密钥创建完成"
 
-  PRIVATEKEY=$(echo $key | grep "Private key" | awk -F ': ' '{print $2}')
-  PUBLICKEY=$(echo $key | grep "Public key" | awk -F ': ' '{print $2}')
+  PRIVATEKEY=$(cat key | grep "Private key" | awk -F ': ' '{print $2}')
+  PUBLICKEY=$(cat key | grep "Public key" | awk -F ': ' '{print $2}')
 
   print_ok "Private key: $PRIVATEKEY"
   print_ok "Public key: $PUBLICKEY"
