@@ -311,6 +311,7 @@ function xray_tmp_config_file_check_and_use() {
 
 function modify_UUID() {
   [ -z "$UUID" ] && UUID=$(cat /proc/sys/kernel/random/uuid)
+  jq ".inbounds[0].settings.clients[0].id=\"$UUID\"" /config.json >/config.json_tmp && mv /config.json_tmp /config.json
   cat ${xray_conf_dir}/config.json | jq 'setpath(["inbounds",0,"settings","clients",0,"id"];"'${UUID}'")' >${xray_conf_dir}/config_tmp.json
   xray_tmp_config_file_check_and_use
   judge "Xray TCP UUID 修改"
@@ -368,10 +369,30 @@ function modify_publickey() {
 }
 
 function configure_xray() {
-  cd /usr/local/etc/xray && rm -f config.json && wget -O config.json https://raw.githubusercontent.com/moyada/xray-reality/${github_branch}/config.json
-  modify_UUID
-  modify_port
-  modify_publickey
+  cd ${xray_conf_dir} && rm -f config.json && wget -O config.json https://raw.githubusercontent.com/moyada/xray-reality/${github_branch}/config.json
+
+  read -rp "请输入端口号(默认：443)：" PORT
+  [ -z "$PORT" ] && PORT="443"
+  if [[ $PORT -le 0 ]] || [[ $PORT -gt 65535 ]]; then
+    print_error "请输入 0-65535 之间的值"
+    exit 1
+  fi
+
+  UUID="$(/xray uuid)"
+
+  /xray x25519 >/key
+  PRIVATEKEY=$(cat /key | grep "Private" | awk -F ': ' '{print $2}')
+  PUBLICKEY=$(cat /key | grep "Public" | awk -F ': ' '{print $2}')
+  
+  echo "Private key: $PRIVATEKEY"
+  echo "Public key: $PUBLICKEY"
+
+  jq ".inbounds[0].settings.clients[0].id=\"$UUID\"" config.json > config.json_tmp && mv config.json_tmp config.json
+  jq ".inbounds[0].streamSettings.realitySettings.privateKey=\"$PRIVATEKEY\"" config.json > config.json_tmp && mv config.json_tmp config.json
+
+  # modify_UUID
+  # modify_port
+  # modify_publickey
 }
 
 function xray_install() {
