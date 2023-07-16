@@ -305,6 +305,7 @@ function xray_tmp_config_file_check_and_use() {
   if [[ -s ${xray_conf_dir}/config_tmp.json ]]; then
     mv -f ${xray_conf_dir}/config_tmp.json ${xray_conf_dir}/config.json
   else
+    cat ${xray_conf_dir}/config_tmp.json
     print_error "xray 配置文件修改异常"
   fi
 }
