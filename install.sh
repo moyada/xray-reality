@@ -380,10 +380,10 @@ function configure_xray() {
 
   UUID="$(/xray uuid)"
 
-  /xray x25519 >/key
-  PRIVATEKEY=$(cat /key | grep "Private" | awk -F ': ' '{print $2}')
-  PUBLICKEY=$(cat /key | grep "Public" | awk -F ': ' '{print $2}')
-  
+  key=$(xray x25519)
+  PRIVATEKEY=$(cat $key | grep "Private" | awk -F ': ' '{print $2}')
+  PUBLICKEY=$(cat $key | grep "Public" | awk -F ': ' '{print $2}')
+
   echo "Private key: $PRIVATEKEY"
   echo "Public key: $PUBLICKEY"
 
