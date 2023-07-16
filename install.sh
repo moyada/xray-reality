@@ -27,7 +27,7 @@ OK="${Green}[OK]${Font}"
 ERROR="${Red}[ERROR]${Font}"
 
 # 变量
-shell_version="1.3.11"
+shell_version="1.0.0"
 github_branch="master"
 xray_conf_dir="/usr/local/etc/xray"
 website_dir="/www/xray_web/"
@@ -383,9 +383,9 @@ function configure_xray() {
   key=$(xray x25519)
   print_ok "key: ${key}"
   PRIVATEKEY=$(echo $key | grep "Private" | awk -F ': ' '{print $2}')
-  PUBLICKEY=$(cat $key | grep "Public" | awk -F ': ' '{print $2}')
+  PUBLICKEY=$(echo $key | grep "Public" | awk -F ': ' '{print $2}')
 
-  echo "Private key: ${PRIVATEKEY}"
+  echo "Private key: $PRIVATEKEY"
   echo "Public key: $PUBLICKEY"
 
   jq ".inbounds[0].settings.clients[0].id=\"$UUID\"" config.json > config.json_tmp && mv config.json_tmp config.json
