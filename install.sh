@@ -403,7 +403,7 @@ function configure_xray() {
 
 function xray_install() {
   print_ok "安装 Xray"
-  curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install
+  curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install --version 1.8.4
   # curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install --beta
   judge "Xray 安装"
 
@@ -765,7 +765,7 @@ menu() {
     xray_uninstall
     ;;
   34)
-    bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" - install --version 1.8.4
+    bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" - install
     restart_all
     ;;
   35)
