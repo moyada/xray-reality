@@ -765,7 +765,7 @@ menu() {
     xray_uninstall
     ;;
   34)
-    bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" - install
+    bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" - install --version 1.8.4
     restart_all
     ;;
   35)
