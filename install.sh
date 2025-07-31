@@ -403,9 +403,9 @@ function configure_xray() {
 
 function xray_install() {
   print_ok "安装 Xray"
-  # curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install
+  curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install
   # curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install --beta
-  curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install --version 24.10.31
+  # curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash -s -- install --version 24.10.31
   judge "Xray 安装"
 
   # 用于生成 Xray 的导入链接
